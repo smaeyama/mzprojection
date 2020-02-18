@@ -6,3 +6,8 @@ Projection operator method for statistical data analysis
     sample_data/ - A sample of time-series data and its projected results  
     QUICK_START.txt - Simple explanation on how to run this source code  
 
+Reference:
+     Shinya Maeyama and Tomo-Hiko Watanabe,
+    "Extracting and Modeling the Effects of Small-Scale Fluctuations on
+     Large-Scale Fluctuations by Mori-Zwanzig Projection operator method", 
+     J. Phys. Soc. Jpn. 89, 024401 (2020).
