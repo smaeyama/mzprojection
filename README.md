@@ -1,21 +1,7 @@
-# mzprojection
-Projection operator method for statistical data analysis
-
-    fortran/ - Fortran source code. See README.txt in detail  
-    python/ - Python source code. See README.txt in detail  
-    sample_data/ - A sample of time-series data and its projected results  
-    QUICK_START.txt - Simple explanation on how to run this source code  
-
-Reference:
-     Shinya Maeyama and Tomo-Hiko Watanabe,
-    "Extracting and Modeling the Effects of Small-Scale Fluctuations on
-     Large-Scale Fluctuations by Mori-Zwanzig Projection operator method", 
-     J. Phys. Soc. Jpn. 89, 024401 (2020).
-=================
-
   mzprojection
-
 =================
+
+Projection operator method for statistical data analysis
 
 ### Overview ###
 
@@ -23,6 +9,13 @@ Reference:
   split ensembles of the analyzed time-series data f(t)^i into correlated and 
   uncorrelated parts with regard to the variable of interests u(t)^i.
 
+
+### Contents ###
+
+    fortran/ - Fortran source code. See README.txt in detail  
+    python/ - Python source code. See README.txt in detail  
+    sample_data/ - A sample of time-series data and its projected results  
+    QUICK_START.txt - Simple explanation on how to run this source code  
 
 
 ### How to use ###
