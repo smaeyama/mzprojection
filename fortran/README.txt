@@ -10,7 +10,6 @@
   split ensembles of the analyzed time-series data f(t)^i into correlated and 
   uncorrelated parts with regard to the variable of interests u(t)^i.
 
-  [Reference: S. Maeyama, T.-H. Watanabe, to be published in J. Phys. Soc. Jpn.]
 
 
 ### How to use ###
