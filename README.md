@@ -5,7 +5,8 @@ Projection operator method for statistical data analysis
 
 ### Overview ###
 
-  The Mori-Zwanzig projection operator method splits ensembles of the analyzed time-series data $f(t)^i$ into correlated and uncorrelated parts with regard to the variable of interests $u(t)^i$.
+  The Mori-Zwanzig projection operator method splits ensembles of the analyzed time-series data <img src="https://latex.codecogs.com/gif.latex?f(t)^i" />
+$f(t)^i$ into correlated and uncorrelated parts with regard to the variable of interests $u(t)^i$.
 
 
 ### Contents ###
