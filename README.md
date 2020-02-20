@@ -59,14 +59,14 @@ Projection operator method for statistical data analysis
   r       ! Uncorrelated term <img src="https://latex.codecogs.com/gif.latex?r(t)^i" />  
   
   != OUTPUT for check =  
-  uu    ! Correlation <img src="https://latex.codecogs.com/gif.latex?\langle&spaceu(t)u&space\rangle" />  
-  ududt ! Correlation <img src="https://latex.codecogs.com/gif.latex?\langle&spaceu(t)\frac{du}{dt}&space\rangle" />  
-  fdudt ! Correlation <img src="https://latex.codecogs.com/gif.latex?\langle&spacef(t)\frac{du}{dt}&space\rangle" />  
-  rr    ! Correlation <img src="https://latex.codecogs.com/gif.latex?\langle&spacer(t)r&space\rangle" />  
-  rdudt ! Correlation <img src="https://latex.codecogs.com/gif.latex?\langle&spacer(t)\frac{du}{dt}&space\rangle" />  
-  ru    ! Correlation <img src="https://latex.codecogs.com/gif.latex?\langle&spacer(t)u&space\rangle" />  
-  fu    ! Correlation <img src="https://latex.codecogs.com/gif.latex?\langle&spacef(t)u&space\rangle" />  
-  ff    ! Correlation <img src="https://latex.codecogs.com/gif.latex?\langle&spacef(t)f&space\rangle" />
+  uu    ! Correlation <img src="https://latex.codecogs.com/gif.latex?\langle&space;u(t)u&space;\rangle" />  
+  ududt ! Correlation <img src="https://latex.codecogs.com/gif.latex?\langle&space;u(t)\frac{du}{dt}&space;\rangle" />  
+  fdudt ! Correlation <img src="https://latex.codecogs.com/gif.latex?\langle&space;f(t)\frac{du}{dt}&space;\rangle" />  
+  rr    ! Correlation <img src="https://latex.codecogs.com/gif.latex?\langle&space;r(t)r&space;\rangle" />  
+  rdudt ! Correlation <img src="https://latex.codecogs.com/gif.latex?\langle&space;r(t)\frac{du}{dt}&space;\rangle" />  
+  ru    ! Correlation <img src="https://latex.codecogs.com/gif.latex?\langle&space;r(t)u&space;\rangle" />  
+  fu    ! Correlation <img src="https://latex.codecogs.com/gif.latex?\langle&space;f(t)u&space;\rangle" />  
+  ff    ! Correlation <img src="https://latex.codecogs.com/gif.latex?\langle&space;f(t)f&space;\rangle" />
 
   See README.txt for data types in Fortran and Python.
 
