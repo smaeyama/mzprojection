@@ -20,7 +20,8 @@ Projection operator method for statistical data analysis
 
   User prepares ensembles of the analyzed time-series data <img src="https://latex.codecogs.com/gif.latex?f(t)^i" />, and the variable of interest <img src="https://latex.codecogs.com/gif.latex?u(t)^i" />, and its time derivative <img src="https://latex.codecogs.com/gif.latex?\frac{du}{dt}(t)^i" />.
 
-  *** Fortran ***
+  ***Fortran***
+    
     use mzprojection, only : mzprojection_ensemble_of_time_series
 
     call mzprojection_ensemble_of_time_series(      &
@@ -29,7 +30,8 @@ Projection operator method for statistical data analysis
              omega, memoryf, s, r,                  & ! OUTPUT
              uu, ududt, fdudt, rr, rdudt, ru, fu, ff) ! OUTPUT
              
-  *** Python ***
+  ***Python***
+  
     from mzprojection import mzprojection_ensemble_of_time_series
 
     omega, memoryf, s, r, uu, ududt, fdudt, rr, rdudt, ru, fu, ff = \
