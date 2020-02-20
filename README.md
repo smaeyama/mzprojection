@@ -5,8 +5,7 @@ Projection operator method for statistical data analysis
 
 ### Overview ###
 
-  The Mori-Zwanzig projection operator method splits ensembles of the analyzed time-series data <img src="https://latex.codecogs.com/gif.latex?f(t)^i" />
-$f(t)^i$ into correlated and uncorrelated parts with regard to the variable of interests $u(t)^i$.
+  The Mori-Zwanzig projection operator method splits ensembles of the analyzed time-series data <img src="https://latex.codecogs.com/gif.latex?f(t)^i" /> into correlated and uncorrelated parts with regard to the variable of interests <img src="https://latex.codecogs.com/gif.latex?u(t)^i" />.
 
 
 ### Contents ###
@@ -19,10 +18,7 @@ $f(t)^i$ into correlated and uncorrelated parts with regard to the variable of i
 
 ### How to use ###
 
-  User prepares ensembles of the analyzed time-series data
-  f(0:nsample-1,0:nperiod-1), and the variable of interest
-  u(0:nsample-1,0:nperiod-1), and its time derivative
-  dudt(0:nsample-1,0:nperiod-1).
+  User prepares ensembles of the analyzed time-series data <img src="https://latex.codecogs.com/gif.latex?f(t)^i" />, and the variable of interest <img src="https://latex.codecogs.com/gif.latex?u(t)^i" />, and its time derivative <img src="https://latex.codecogs.com/gif.latex?\frac{du}{dt}(t)^i" />.
 
   *** Fortran ***
     use mzprojection, only : mzprojection_ensemble_of_time_series
@@ -32,34 +28,41 @@ $f(t)^i$ into correlated and uncorrelated parts with regard to the variable of i
              u, dudt, f,                            & ! INPUT
              omega, memoryf, s, r,                  & ! OUTPUT
              uu, ududt, fdudt, rr, rdudt, ru, fu, ff) ! OUTPUT
+             
+  *** Python ***
+    from mzprojection import mzprojection_ensemble_of_time_series
+
+    omega, memoryf, s, r, uu, ududt, fdudt, rr, rdudt, ru, fu, ff = \
+    mzprojection_ensemble_of_time_series(nsample, nperiod, delta_t, u, dudt, f)
 
 
 ### Parameters ###
 
   != INPUT =
-  integer         :: nsample ! # of samples for ensemble average
-  integer         :: nperiod ! Length of a sample
-  real(kind=8)    :: delta_t ! Time step size
-  complex(kind=8) ::    u(0:nsample-1,0:nperiod-1) ! Variable u(t)
-  complex(kind=8) :: dudt(0:nsample-1,0:nperiod-1) ! = du/dt
-  complex(kind=8) ::    f(0:nsample-1,0:nperiod-1) ! Analyzed f(t)
+   nsample ! # of samples for ensemble average
+   nperiod ! Length of a sample
+   delta_t ! Time step size
+   u       ! Variable <img src="https://latex.codecogs.com/gif.latex?u(t)^i" />
+   dudt    ! = du/dt
+   f       ! Analyzed <img src="https://latex.codecogs.com/gif.latex?f(t)^i" />
 
   != OUTPUT =
-  complex(kind=8) :: omega                      ! Markov coefficient Omega
-  complex(kind=8) :: memoryf(0:nperiod-1)       ! Memory function Gamma(t)
-  complex(kind=8) :: s(0:nsample-1,0:nperiod-1) ! Memory term
-  complex(kind=8) :: r(0:nsample-1,0:nperiod-1) ! Uncorrelated term r(t)
+  omega   ! Markov coefficient <img src="https://latex.codecogs.com/gif.latex?\Omega" />
+  memoryf ! Memory function <img src="https://latex.codecogs.com/gif.latex?\Gamma(t)" />
+  s       ! Memory term <img src="https://latex.codecogs.com/gif.latex?M(t)^i" />
+  r       ! Uncorrelated term <img src="https://latex.codecogs.com/gif.latex?r(t)^i" />
 
   != OUTPUT for check =
-  complex(kind=8) ::    uu(0:nperiod-1) ! Correlation <u(t)u>
-  complex(kind=8) :: ududt(0:nperiod-1) ! Correlation <u(t)du/dt>
-  complex(kind=8) :: fdudt(0:nperiod-1) ! Correlation <f(t)du/dt>
-  complex(kind=8) ::    rr(0:nperiod-1) ! Correlation <r(t)r>
-  complex(kind=8) :: rdudt(0:nperiod-1) ! Correlation <r(t)du/dt>
-  complex(kind=8) ::    ru(0:nperiod-1) ! Correlation <r(t)u>
-  complex(kind=8) ::    fu(0:nperiod-1) ! Correlation <f(t)u>
-  complex(kind=8) ::    ff(0:nperiod-1) ! Correlation <f(t)f>
+  uu    ! Correlation <img src="https://latex.codecogs.com/gif.latex?\langle u(t)u \rangle" />
+  ududt ! Correlation <img src="https://latex.codecogs.com/gif.latex?\langle u(t)\frac{du}{dt} \rangle" />
+  fdudt ! Correlation <img src="https://latex.codecogs.com/gif.latex?\langle f(t)\frac{du}{dt} \rangle" />
+  rr    ! Correlation <img src="https://latex.codecogs.com/gif.latex?\langle r(t)r \rangle" />
+  rdudt ! Correlation <img src="https://latex.codecogs.com/gif.latex?\langle r(t)\frac{du}{dt} \rangle" />
+  ru    ! Correlation <img src="https://latex.codecogs.com/gif.latex?\langle r(t)u \rangle" />
+  fu    ! Correlation <img src="https://latex.codecogs.com/gif.latex?\langle f(t)u \rangle" />
+  ff    ! Correlation <img src="https://latex.codecogs.com/gif.latex?\langle f(t)f \rangle" />
 
+  See README.txt for data types in Fortran and Python.
 
 ### Theoretical description ###
 
