@@ -3,23 +3,23 @@
 
 Projection operator method for statistical data analysis
 
-### Overview ###
-===
 
+### Overview ###
+------------------------------------------------------------------------------------------
   The Mori-Zwanzig projection operator method splits ensembles of the analyzed time-series data <img src="https://latex.codecogs.com/gif.latex?f(t)^i" /> into correlated and uncorrelated parts with regard to the variable of interests <img src="https://latex.codecogs.com/gif.latex?u(t)^i" />.
 
----
 
 ### Contents ###
+------------------------------------------------------------------------------------------
 
     fortran/ - Fortran source code. See README.txt in detail  
     python/ - Python source code. See README.txt in detail  
     sample_data/ - A sample of time-series data and its projected results  
     QUICK_START.txt - Simple explanation on how to run this source code  
 
----
 
 ### How to use ###
+------------------------------------------------------------------------------------------
 
   User prepares ensembles of the analyzed time-series data <img src="https://latex.codecogs.com/gif.latex?f(t)^i" />, and the variable of interest <img src="https://latex.codecogs.com/gif.latex?u(t)^i" />, and its time derivative <img src="https://latex.codecogs.com/gif.latex?\frac{du}{dt}(t)^i" />.
 
@@ -40,9 +40,9 @@ Projection operator method for statistical data analysis
     omega, memoryf, s, r, uu, ududt, fdudt, rr, rdudt, ru, fu, ff = \
     mzprojection_ensemble_of_time_series(nsample, nperiod, delta_t, u, dudt, f)
 
----
 
 ### Parameters ###
+------------------------------------------------------------------------------------------
 
   != INPUT =
    nsample ! # of samples for ensemble average
@@ -70,9 +70,9 @@ Projection operator method for statistical data analysis
 
   See README.txt for data types in Fortran and Python.
 
----
 
 ### Theoretical description ###
+------------------------------------------------------------------------------------------
 
   Mori-Zwanzig projection of the analyzed time-series data f(t) onto the 
   variable of interest u(t) provides a generalized Langevin form,
@@ -99,6 +99,7 @@ Projection operator method for statistical data analysis
 
 
 ### Numerical implementation ###
+------------------------------------------------------------------------------------------
 
   Let assume ensemble of time-series data f(t)^i and u(t)^i are prepared.
 
@@ -152,6 +153,7 @@ Projection operator method for statistical data analysis
 
 
 ### License and Copyright ###
+------------------------------------------------------------------------------------------
 
   Copyright (c) Shinya Maeyama, Nagoya University, since 2019.
 
