@@ -27,45 +27,45 @@ Projection operator method for statistical data analysis
     
     use mzprojection, only : mzprojection_ensemble_of_time_series
 
-    call mzprojection_ensemble_of_time_series(      &
-             nsample, nperiod, delta_t,             & ! INPUT
-             u, dudt, f,                            & ! INPUT
-             omega, memoryf, s, r,                  & ! OUTPUT
-             uu, ududt, fdudt, rr, rdudt, ru, fu, ff) ! OUTPUT
+    call mzprojection_ensemble_of_time_series(      &  
+             nsample, nperiod, delta_t,             & ! INPUT  
+             u, dudt, f,                            & ! INPUT  
+             omega, memoryf, s, r,                  & ! OUTPUT  
+             uu, ududt, fdudt, rr, rdudt, ru, fu, ff) ! OUTPUT  
              
   ***Python***
   
     from mzprojection import mzprojection_ensemble_of_time_series
 
-    omega, memoryf, s, r, uu, ududt, fdudt, rr, rdudt, ru, fu, ff = \
-    mzprojection_ensemble_of_time_series(nsample, nperiod, delta_t, u, dudt, f)
+    omega, memoryf, s, r, uu, ududt, fdudt, rr, rdudt, ru, fu, ff = \  
+    mzprojection_ensemble_of_time_series(nsample, nperiod, delta_t, u, dudt, f)  
 
 
 ### Parameters ###
 ------------------------------------------------------------------------------------------
 
-  != INPUT =
-   nsample ! # of samples for ensemble average
-   nperiod ! Length of a sample
-   delta_t ! Time step size
-   u       ! Variable <img src="https://latex.codecogs.com/gif.latex?u(t)^i" />
-   dudt    ! = du/dt
-   f       ! Analyzed <img src="https://latex.codecogs.com/gif.latex?f(t)^i" />
+  != INPUT =  
+   nsample ! # of samples for ensemble average  
+   nperiod ! Length of a sample  
+   delta_t ! Time step size  
+   u       ! Variable <img src="https://latex.codecogs.com/gif.latex?u(t)^i" />  
+   dudt    ! = du/dt  
+   f       ! Analyzed <img src="https://latex.codecogs.com/gif.latex?f(t)^i" />  
 
-  != OUTPUT =
-  omega   ! Markov coefficient <img src="https://latex.codecogs.com/gif.latex?\Omega" />
-  memoryf ! Memory function <img src="https://latex.codecogs.com/gif.latex?\Gamma(t)" />
-  s       ! Memory term <img src="https://latex.codecogs.com/gif.latex?M(t)^i" />
-  r       ! Uncorrelated term <img src="https://latex.codecogs.com/gif.latex?r(t)^i" />
-
-  != OUTPUT for check =
-  uu    ! Correlation <img src="https://latex.codecogs.com/gif.latex?\langle u(t)u \rangle" />
-  ududt ! Correlation <img src="https://latex.codecogs.com/gif.latex?\langle u(t)\frac{du}{dt} \rangle" />
-  fdudt ! Correlation <img src="https://latex.codecogs.com/gif.latex?\langle f(t)\frac{du}{dt} \rangle" />
-  rr    ! Correlation <img src="https://latex.codecogs.com/gif.latex?\langle r(t)r \rangle" />
-  rdudt ! Correlation <img src="https://latex.codecogs.com/gif.latex?\langle r(t)\frac{du}{dt} \rangle" />
-  ru    ! Correlation <img src="https://latex.codecogs.com/gif.latex?\langle r(t)u \rangle" />
-  fu    ! Correlation <img src="https://latex.codecogs.com/gif.latex?\langle f(t)u \rangle" />
+  != OUTPUT =  
+  omega   ! Markov coefficient <img src="https://latex.codecogs.com/gif.latex?\Omega" />  
+  memoryf ! Memory function <img src="https://latex.codecogs.com/gif.latex?\Gamma(t)" />  
+  s       ! Memory term <img src="https://latex.codecogs.com/gif.latex?M(t)^i" />  
+  r       ! Uncorrelated term <img src="https://latex.codecogs.com/gif.latex?r(t)^i" />  
+  
+  != OUTPUT for check =  
+  uu    ! Correlation <img src="https://latex.codecogs.com/gif.latex?<u(t)u>" />  
+  ududt ! Correlation <img src="https://latex.codecogs.com/gif.latex?\langle u(t)\frac{du}{dt} \rangle" />  
+  fdudt ! Correlation <img src="https://latex.codecogs.com/gif.latex?\langle f(t)\frac{du}{dt} \rangle" />  
+  rr    ! Correlation <img src="https://latex.codecogs.com/gif.latex?\langle r(t)r \rangle" />  
+  rdudt ! Correlation <img src="https://latex.codecogs.com/gif.latex?\langle r(t)\frac{du}{dt} \rangle" />  
+  ru    ! Correlation <img src="https://latex.codecogs.com/gif.latex?\langle r(t)u \rangle" />  
+  fu    ! Correlation <img src="https://latex.codecogs.com/gif.latex?\langle f(t)u \rangle" />  
   ff    ! Correlation <img src="https://latex.codecogs.com/gif.latex?\langle f(t)f \rangle" />
 
   See README.txt for data types in Fortran and Python.
