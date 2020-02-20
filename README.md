@@ -59,14 +59,14 @@ Projection operator method for statistical data analysis
   r       ! Uncorrelated term <img src="https://latex.codecogs.com/gif.latex?r(t)^i" />  
   
   != OUTPUT for check =  
-  uu    ! Correlation <img src="https://latex.codecogs.com/gif.latex?<u(t)u>" />  
-  ududt ! Correlation <img src="https://latex.codecogs.com/gif.latex?\langle u(t)\frac{du}{dt} \rangle" />  
-  fdudt ! Correlation <img src="https://latex.codecogs.com/gif.latex?\langle f(t)\frac{du}{dt} \rangle" />  
-  rr    ! Correlation <img src="https://latex.codecogs.com/gif.latex?\langle r(t)r \rangle" />  
-  rdudt ! Correlation <img src="https://latex.codecogs.com/gif.latex?\langle r(t)\frac{du}{dt} \rangle" />  
-  ru    ! Correlation <img src="https://latex.codecogs.com/gif.latex?\langle r(t)u \rangle" />  
-  fu    ! Correlation <img src="https://latex.codecogs.com/gif.latex?\langle f(t)u \rangle" />  
-  ff    ! Correlation <img src="https://latex.codecogs.com/gif.latex?\langle f(t)f \rangle" />
+  uu    ! Correlation <img src="https://latex.codecogs.com/gif.latex?\langle&spaceu(t)u&space\rangle" />  
+  ududt ! Correlation <img src="https://latex.codecogs.com/gif.latex?\langle&spaceu(t)\frac{du}{dt}&space\rangle" />  
+  fdudt ! Correlation <img src="https://latex.codecogs.com/gif.latex?\langle&spacef(t)\frac{du}{dt}&space\rangle" />  
+  rr    ! Correlation <img src="https://latex.codecogs.com/gif.latex?\langle&spacer(t)r&space\rangle" />  
+  rdudt ! Correlation <img src="https://latex.codecogs.com/gif.latex?\langle&spacer(t)\frac{du}{dt}&space\rangle" />  
+  ru    ! Correlation <img src="https://latex.codecogs.com/gif.latex?\langle&spacer(t)u&space\rangle" />  
+  fu    ! Correlation <img src="https://latex.codecogs.com/gif.latex?\langle&spacef(t)u&space\rangle" />  
+  ff    ! Correlation <img src="https://latex.codecogs.com/gif.latex?\langle&spacef(t)f&space\rangle" />
 
   See README.txt for data types in Fortran and Python.
 
