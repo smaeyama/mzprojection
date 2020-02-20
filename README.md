@@ -4,9 +4,10 @@
 Projection operator method for statistical data analysis
 
 ### Overview ###
----
+
   The Mori-Zwanzig projection operator method splits ensembles of the analyzed time-series data <img src="https://latex.codecogs.com/gif.latex?f(t)^i" /> into correlated and uncorrelated parts with regard to the variable of interests <img src="https://latex.codecogs.com/gif.latex?u(t)^i" />.
 
+---
 
 ### Contents ###
 
@@ -15,6 +16,7 @@ Projection operator method for statistical data analysis
     sample_data/ - A sample of time-series data and its projected results  
     QUICK_START.txt - Simple explanation on how to run this source code  
 
+---
 
 ### How to use ###
 
@@ -37,6 +39,7 @@ Projection operator method for statistical data analysis
     omega, memoryf, s, r, uu, ududt, fdudt, rr, rdudt, ru, fu, ff = \
     mzprojection_ensemble_of_time_series(nsample, nperiod, delta_t, u, dudt, f)
 
+---
 
 ### Parameters ###
 
@@ -65,6 +68,8 @@ Projection operator method for statistical data analysis
   ff    ! Correlation <img src="https://latex.codecogs.com/gif.latex?\langle f(t)f \rangle" />
 
   See README.txt for data types in Fortran and Python.
+
+---
 
 ### Theoretical description ###
 
