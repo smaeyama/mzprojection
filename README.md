@@ -18,5 +18,5 @@ The Mori-Zwanzig projection operator method splits ensembles of the analyzed tim
 
 ### Reference ###
 
-Shinya Maeyama and Tomo-Hiko Watanabe, "Extracting and Modeling the Effects of Small-Scale Fluctuations on Large-Scale Fluctuations by Mori-Zwanzig Projection operator method", J. Phys. Soc. Jpn. 89, 024401 (2020).
+[Shinya Maeyama and Tomo-Hiko Watanabe, "Extracting and Modeling the Effects of Small-Scale Fluctuations on Large-Scale Fluctuations by Mori-Zwanzig Projection operator method", J. Phys. Soc. Jpn. 89, 024401 (2020).](https://doi.org/10.7566/JPSJ.89.024401)
 
