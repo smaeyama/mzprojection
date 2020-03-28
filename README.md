@@ -1,7 +1,7 @@
   mzprojection
 =================
 
-Projection operator method for statistical data analysis
+Projection operator method for statistical data analysis (Fortran90 or Python3)
 
 
 ### Overview ###
@@ -11,8 +11,8 @@ The Mori-Zwanzig projection operator method splits ensembles of the analyzed tim
 
 ### Contents ###
 
-    fortran/ - Fortran source code. See README.txt in detail  
-    python/ - Python source code. See README.txt in detail  
+    fortran/ - Fortran90 source code. See README.txt in detail  
+    python/ - Python3 source code. See README.txt in detail  
     sample_data/ - A sample of time-series data and its projected results  
     QUICK_START.txt - Simple explanation on how to run this source code  
 
