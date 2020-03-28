@@ -1,7 +1,7 @@
   mzprojection
 =================
 
-射影演算子法による統計データ解析
+射影演算子法による統計データ解析 (Fortran90 または Python3)
 
 
 ### Overview ###
@@ -12,8 +12,8 @@
 
 ### Contents ###
 
-    fortran/ - Fortran 版ソースコード。サブルーチンの使い方や理論の詳細は README.txt 参照  
-    python/ - Python 版ソースコード。関数の使い方や理論の詳細は README.txt 参照  
+    fortran/ - Fortran90 版ソースコード。サブルーチンの使い方や理論の詳細は README.txt 参照  
+    python/ - Python3 版ソースコード。関数の使い方や理論の詳細は README.txt 参照  
     sample_data/ - サンプル時系列データとその射影結果  
     QUICK_START.txt - テストプログラムを実行するための簡易説明  
 
