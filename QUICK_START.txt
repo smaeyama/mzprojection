@@ -4,7 +4,7 @@
 
   ### Running a sample program ###
   cd ./fortran/
-  ./compile_and_run.sh
+  sh compile_and_run.sh
 
   Mori-Zwanzig projection is applied to "./sample_data/sample_time_series.dat".
   Output files describe the Memory function, uncorrelated term, and so on.
@@ -18,11 +18,13 @@
   Mori-Zwanzig projection module is "mzprojection.py" in "./python/".
 
   ### Running a sample program ###
-  cd ./fortran/
-  ./compile_and_run.sh
+  cd ./python/
+  python example.py
 
   Mori-Zwanzig projection is applied to "./sample_data/sample_time_series.dat".
   Output files describe the Memory function, uncorrelated term, and so on.
 
   See "README.txt" and the sample program "example.py" for details.
 
+  * If you use jupyter-notebook, "./python/Demo_Aug2020.ipynb" will be
+    a convenient example with graphical interpretation.
