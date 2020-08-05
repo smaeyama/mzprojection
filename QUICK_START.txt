@@ -4,7 +4,7 @@
 
   ### Running a sample program ###
   cd ./fortran/
-  source compile_and_run.sh
+  sh compile_and_run.sh
 
   Mori-Zwanzig projection is applied to "./sample_data/sample_time_series.dat".
   Output files describe the Memory function, uncorrelated term, and so on.
