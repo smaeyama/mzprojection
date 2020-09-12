@@ -148,7 +148,7 @@ def mzprojection_long_time_series(nrec, ista, nperiod, nshift, delta_t, u_raw, d
     s_raw[0:ista] = 0.0
     wu = np.array(u_raw[ista-nperiod+2:nrec])
     wu[0:nperiod-1] = 0.0
-    wkmemf = memoryf[0:nperiod]
+    wkmemf = np.array(memoryf[0:nperiod])
     wkmemf[0] = 0.5*memoryf[0]
     wkmemf[nperiod-1] = 0.5*memoryf[nperiod-1]
     s_raw[ista+1:nrec] = - np.convolve(wu,wkmemf,mode="valid") * delta_t
