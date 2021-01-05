@@ -146,8 +146,8 @@ def mzprojection_long_time_series(nrec, ista, nperiod, nshift, delta_t, u_raw, d
     #= Evaluate uncorrelated term r(t) as a residual =
     #- 2nd-order integration for memory term s(t) -
     s_raw[0:ista] = 0.0
-    wu = np.array(u_raw[ista-nperiod+2:nrec])
-    wu[0:nperiod-1] = 0.0
+    wu = np.zeros(nrec-ista+nperiod-2, dtype=np.complex128)
+    wu[-nrec+ista:] = np.array(u_raw[ista:nrec])
     wkmemf = np.array(memoryf[0:nperiod])
     wkmemf[0] = 0.5*memoryf[0]
     wkmemf[nperiod-1] = 0.5*memoryf[nperiod-1]
@@ -159,3 +159,144 @@ def mzprojection_long_time_series(nrec, ista, nperiod, nshift, delta_t, u_raw, d
 
     return omega, memoryf, s_raw, r_raw, uu, ududt, fdudt, rr, rdudt, ru, fu, ff
 
+
+
+def memoryf_get_fitting_coef(delta_t, memoryf, order=0, t_range=None):
+    '''
+    Fitting memory function Gamma(t) = \sum_l=0^order c_l/l!*(t/tau)**l*exp(-t/tau)
+    where c_l and tau are complex numbers.
+    
+    Parameters
+    ----------
+    delta_t : float
+        Time step size
+    memoryf : Numpy array
+        Memory function Gamma(t)
+    order : int, optional
+        Order of fitting. Default order=0.
+    t_range : int, optional
+        Fitting for Gamma[0:trange]. Default t_range=len(memoryf).
+        
+    Returns
+    -------
+    tau : complex
+        Fitting memory time scale
+    cl(order+1) : Numpy array, dtype=np.complex128
+        Fitting coefficient
+    '''
+    import numpy as np
+    from scipy import optimize
+
+    # Fitting function
+    def memoryf_function(param, x):
+        tauinv = param[0]+1j*param[1]
+        cl = param[2:].view(np.complex128)
+        for i in range(len(cl)):
+            if i == 0:
+                wf = np.exp(-x*tauinv)
+                func = cl[0] * wf
+            else:
+                wf = wf * (x*tauinv) / i
+                func = func + cl[i] * wf
+        return func
+    
+    # Error
+    def memoryf_error(param, x, y):
+        return np.abs(y - memoryf_function(param, x))
+
+    # Initial guess
+    #param = np.array([1+0j for i in range(order+2)]).view(np.float64)
+    param = np.ones(1+order+1, dtype=np.complex128)
+    param[0] = 4/(t_range*delta_t)
+    param[1] = 1.0*memoryf[0]
+    param = param.view(np.float64)
+    
+    # Nonlinear regression by Levenberg-Marquardt algorithm
+    if t_range is None:
+        t_range = len(memoryf)
+    else:
+        t_range = min(t_range,len(memoryf))
+    t_cor = delta_t*np.arange(t_range)
+    param, cov = optimize.leastsq(memoryf_error, param, args=(t_cor,memoryf[0:t_range]))
+    tau=1/(param[0]+1j*param[1])
+    cl=param[2:].view(np.complex128)
+    
+    return tau, cl
+
+
+def rr_get_fitting_coef(delta_t, rr, t_range=None):
+    '''
+    Fitting auto-correlation of the uncorrelated term
+    <r(t)r(0)^*> = Re[simga**2/theta]*exp(-t/theta)
+    where sigma is real and theta is complex number.
+    
+    Parameters
+    ----------
+    delta_t : float
+        Time step size
+    rr : Numpy array
+        <r(t)r(0)^*>
+    t_range : int, optional
+        Fitting for rr[0:trange]. Default t_range=len(rr).
+        
+    Returns
+    -------
+    theta : complex
+        Fitting <r(t)r(0)^*> time scale
+    sigma : float
+        Fitting <r(t)r(0)^*> amplitude
+    '''
+    import numpy as np
+    from scipy import optimize
+
+    # Analyzed time range
+    if t_range is None:
+        t_range = len(rr)
+    else:
+        t_range = min(t_range,len(rr))
+    t_cor = delta_t*np.arange(t_range)
+    
+    # Fitting function
+    def rr_function(param, x):
+        sigma2 = param[0]
+        thetainv = param[1]+1j*param[2]
+        func = (sigma2*thetainv).real * np.exp(-x*thetainv)
+        return func
+    
+    # Error
+    def rr_error(param, x, y):
+        return np.abs(y - rr_function(param, x))
+
+    # Initial guess
+    #param = np.array([1,1,1])
+    param = np.array([np.abs(rr[0])*(t_range*delta_t)/4, 4/(t_range*delta_t), 0])
+
+    # Nonlinear regression by Levenberg-Marquardt algorithm
+    param, cov = optimize.leastsq(rr_error, param, args=(t_cor,rr[0:t_range]))
+    sigma=np.sqrt(param[0])
+    theta = 1/(param[1]+1j*param[2])
+    
+    return theta, sigma
+
+
+def memoryf_fitted(tau, cl, x):
+    '''
+    Gamma(t) = \sum_l=0^order c_l/l!*(t/tau)**l*exp(-t/tau)
+    '''
+    import numpy as np
+    for i in range(len(cl)):
+        if i == 0:
+            wf = np.exp(-x/tau)
+            func = cl[0] * wf
+        else:
+            wf = wf * (x/tau) / i
+            func = func + cl[i] * wf
+        return func
+
+def rr_fitted(theta, sigma, x):
+    '''
+    <r(t)r(0)^*> = Re[simga**2/theta]*exp(-t/theta)
+    '''
+    import numpy as np
+    func = (sigma**2/theta).real * np.exp(-x/theta)
+    return func
