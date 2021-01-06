@@ -3,7 +3,8 @@
 
 if __name__ == '__main__':
     import numpy as np
-    from mzprojection import mzprojection_ensemble_of_time_series, mzprojection_long_time_series
+    from mzprojection import mzprojection_long_time_series
+    #from mzprojection import mzprojection_ensemble_of_time_series
 
     #= Read sample data =
     indata = np.loadtxt('../sample_data/sample_time_series.dat')
