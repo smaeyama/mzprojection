@@ -1,7 +1,8 @@
   mzprojection
 =================
 
-Projection operator method for statistical data analysis (Fortran90 or Python3)
+Projection operator method for statistical data analysis (Fortran90 or Python3)  
+[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/smaeyama/mzprojection.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/smaeyama/mzprojection/context:python)
 
 
 ### Overview ###
@@ -39,5 +40,6 @@ See also `python/Demo_Jan2021.ipynb`, which clearly shows examples of usage incl
 
 ### Reference ###
 
-[Shinya Maeyama and Tomo-Hiko Watanabe, "Extracting and Modeling the Effects of Small-Scale Fluctuations on Large-Scale Fluctuations by Mori-Zwanzig Projection operator method", J. Phys. Soc. Jpn. 89, 024401 (2020).](https://doi.org/10.7566/JPSJ.89.024401)
+[Shinya Maeyama and Tomo-Hiko Watanabe, "Extracting and Modeling the Effects of Small-Scale Fluctuations on Large-Scale Fluctuations by Mori-Zwanzig Projection operator method", J. Phys. Soc. Jpn. 89, 024401 (2020).](https://doi.org/10.7566/JPSJ.89.024401)  
+[![doi](https://img.shields.io/badge/doi-10.7566/JPSJ.89.024401-5077AB.svg)](https://doi.org/10.7566/JPSJ.89.024401)
 
