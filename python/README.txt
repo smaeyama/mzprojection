@@ -7,50 +7,95 @@
 ### Overview ###
 
   This is explanation of a Python3 module of Mori-Zwanzig projection, which
-  split ensembles of the analyzed time-series data f(t)^i into correlated and 
-  uncorrelated parts with regard to the variable of interests u(t)^i.
+  split ensembles of the analyzed time-series data f_i(t) into correlated and 
+  uncorrelated parts with regard to the variable of interests u_j(t).
 
+  Oct. 2021, "mzprojection_multivariate" for projection of response variables f_i(t)
+  on multiple explanatory variables u_j(t) has been developed (Oct. 2021).
+  The previous 1-to-1 projection will be obsolete, because it is covered by multivariate one.
 
 
 ### How to use ###
 
-  User prepares ensembles of the analyzed time-series data
-  f[nperiod,nsample], and the variable of interest
-  u[nperiod,nsample], and its time derivative
-  dudt[nperiod,nsample].
+  1.  User prepares an ensemble data set, namely a number of samples of time-series data,
+          delta_t               : Time step size
+          f[nsample,nperiod,nf] : Response variables
+          u[nsample,nperiod,nu] : Explanatory variables
+          dudt0[nsample,nu]     : = du/dt at t=0 of each samples
+      See also the help on mzprojection_multivariate.
 
-  *** Python ***
-    from mzprojection import mzprojection_ensemble_of_time_series
+      If one would like to create these samples from a long time-series data,
+      the following function could be useful,
+      ```
+      from mzprojection import split_long_time_series
+      u = split_long_time_series(u_raw, ista=100, nperiod=200, nshift=10)
+      ```
 
-    omega, memoryf, s, r, uu, ududt, fdudt, rr, rdudt, ru, fu, ff = \
-    mzprojection_ensemble_of_time_series(nsample, nperiod, delta_t, u, dudt, f)
+  2.  Calculate the Markov coefficient matrix omega and memory function memoryf from the data set,
+      ```
+      from mzprojection import mzprojection_multivariate
+      omega, memoryf = mzprojection_multivariate(delta_t, u, dudt0, f)
+      ```
+      If one would like to evaluate the memory term s_i(t) and the uncorrelated term r_i(t),
+      ```
+      omega, memoryf, s, r = mzprojection_multivariate(delta_t, u, dudt0, f, flag_terms=True)
+      ```
+
+  3.  That's all!
+
+      If one would like to calculate various correlations, just take average over samples.
+      Since this would often happens, there is a function (just by numpy.tensordot),
+      ```
+      from mzprojection import calc_correlation
+      u0 = u[:,0,:]
+      fu = calc_correlation(f,u0)
+      ```
+      Then one gets the cross-correlation between f_i(t) and u_j(0) as fu[nperiod,nf,nu].
 
 
-### Parameters ###
+### Help on mzprojection_multivariate ###
 
-  != INPUT =
-  integer          :: nsample ! # of samples for ensemble average
-  integer          :: nperiod ! Length of a sample
-  numpy.float64    :: delta_t ! Time step size
-  numpy.complex128 ::    u[nperiod,nsample] ! Variable u(t)
-  numpy.complex128 :: dudt[nperiod,nsample] ! = du/dt
-  numpy.complex128 ::    f[nperiod,nsample] ! Analyzed f(t)
-
-  != OUTPUT =
-  numpy.complex128 :: omega              ! Markov coefficient Omega
-  numpy.complex128 :: memoryf[nperiod]   ! Memory function Gamma(t)
-  numpy.complex128 :: s[nperiod,nsample] ! Memory term
-  numpy.complex128 :: r[nperiod,nsample] ! Uncorrelated term r(t)
-
-  != OUTPUT for check =
-  numpy.complex128 ::    uu[nperiod] ! Correlation <u(t)u>
-  numpy.complex128 :: ududt[nperiod] ! Correlation <u(t)du/dt>
-  numpy.complex128 :: fdudt[nperiod] ! Correlation <f(t)du/dt>
-  numpy.complex128 ::    rr[nperiod] ! Correlation <r(t)r>
-  numpy.complex128 :: rdudt[nperiod] ! Correlation <r(t)du/dt>
-  numpy.complex128 ::    ru[nperiod] ! Correlation <r(t)u>
-  numpy.complex128 ::    fu[nperiod] ! Correlation <f(t)u>
-  numpy.complex128 ::    ff[nperiod] ! Correlation <f(t)f>
+  def mzprojection_multivariate(delta_t, u, dudt0, f, flag_terms=False, flag_debug=False):
+      '''
+      Evaluate projection of f(t) on u(t),
+        f_i(t) = Omega_ij*u_j(t) - int_0^t Gamma_ij(s)*u_j(t-s) ds + r_i(t)
+      taking summation over the repeated index j.
+      
+      Parameters
+      ----------
+      delta_t : float
+          Time step size
+      u[nsample,nperiod,nu] : Numpy array (float64 or complex128)
+          Explanatory variable u_j(t).
+          nsample is the number of samples.
+          nperiod is the number of time steps of each sample.
+          nu is the number of degree of freedom of explanatory variable u_j (j=0,1,...,nu-1).
+      dudt[nsample,nperiod,nu] : Numpy array (float64 or complex128)
+          = du/dt
+      f[nsample,nperiod,nf] : Numpy array (float64 or complex128)
+          Response variable f_i(t).
+          nf is the number of independent response variables (i=0,1,...,nf-1).
+          If 2D array f[nsample,nperiod] is passed, it is treated as 3D array with nf=1.
+      flag_terms : bool
+          Control flag to output memory and uncorrelated terms. 
+          Default: flag_term = False
+      flag_debug : bool
+          For debug.
+          Default: flag_debug = False
+      
+      Returns
+      -------
+      omega[nf,nu] : Numpy array (float64 or complex128)
+          Markov coefficient matrix Omega_ij.
+      memoryf[nperiod,nf,nu] : Numpy array (float64 or complex128)
+          Memory function matrix Gamma_ij(t).
+      
+      # if flag_terms==True:
+      s[nsample,nperiod,nf] : Numpy array (float64 or complex128)
+          Memory term s_i(t) = - int_0^t Gamma_ij(s)*u_j(t-s) ds
+      r[nsample,nperiod,nf] : Numpy array (float64 or complex128)
+          Uncorrelated term r_i(t) (also called orthogonal term or noise term).
+      '''
 
 
 ### Theoretical description ###
@@ -58,74 +103,80 @@
   Mori-Zwanzig projection of the analyzed time-series data f(t) onto the 
   variable of interest u(t) provides a generalized Langevin form,
 
-    f(t) = omega*u(t) + s(t) + r(t)
+    f_i(t) = Omega_{ij}u_j(t) + s_i(t) + r_i(t)
 
-  where s(t) = - \int_0^t memoryf(t)*u(t-v) dv is the memory term.
+  where s_i(t) = - \int_0^t Gamma_{ij}(t)*u_j(t-v) dv is the memory term.
+  Take summation over the repeated index j.
 
-  omega, memoryf(t), r(t) are called as the Markov coefficient, memory function,
-  uncorrelated term (or so-called noise term), respectively.
+  Omega, Gamma(t), r(t) are called as the Markov coefficient matrix,
+  memory function matrix, uncorrelated term (or so-called orthogonal 
+  dynamics or noise term), respectively.
 
   They are defined by
 
-    omega = <f*u^*>.<u*u^*>^-1
-    memoryf(t) = <r(t)*du/dt^*>.<u*u^*>^-1
+    Omega = <f*u^*>.<u*u^*>^-1
+    Gamma(t) = <r(t)*du/dt^*>.<u*u^*>^-1
     <r(t)*u^*> = 0
 
   where ( )^* is the complex conjugate, ( )^-1 is the inverse of matrix, 
   ( ).( ) is the matrix product, < > is the ensemble average.  f, u, dudt 
   are shorthand of initial values, i.e., f=f(0), u=u(0), dudt=dudt(0).
 
-  Therefore, the 1st and 2nd term (omega*u(t) and s(t)) are correlated 
+  Therefore, the 1st and 2nd term (Omega.u(t) and s(t)) are correlated 
   with u(t), while the 3rd (r(t)) is not.
 
 
 ### Numerical implementation ###
 
-  Let assume ensemble of time-series data f(t)^i and u(t)^i are prepared.
+  Let us assume an ensemble of time-series data f(t)^l and u(t)^l are prepared.
 
          t =      0, delta_t, 2*delta_t, 3*delta_t, ..., (nperiod-1)*delta_t
-    u(t)^i = u(0)^i,  u(1)^i,    u(2)^i,    u(3)^i, ..., u(nperiod-1)^i
-    f(t)^i = f(0)^i,  f(1)^i,    f(2)^i,    f(3)^i, ..., f(nperiod-1)^i
+    u(t)^l = u(0)^l,  u(1)^l,    u(2)^l,    u(3)^l, ..., u(nperiod-1)^l
+    f(t)^l = f(0)^l,  f(1)^l,    f(2)^l,    f(3)^l, ..., f(nperiod-1)^l
 
-  where i = 0, 1, 2, ..., nsample-1.
+  where l = 0, 1, 2, ..., nsample-1.
+  Note that u={u_0, u_1, ..., u_nu-1} and f={f_0, f_1, ..., f_nf-1} are vectors.
 
-  Ensemble average is defined as summation over i, e.g.,
+  Ensemble average is defined as summation over l, e.g.,
 
-    <f*u^*> = (1/nsample) * sum_{i=0}^{nsample-1} f^i*(u^i)^*.
+    <f_i*u_j^*> = (1/nsample) * sum_{l=0}^{nsample-1} f_i^l*(u_j^l)^*.
 
-  Then, omega is obtained from
+  Then, Omega is obtained from
 
     omega = <f*u^*>.<u*u^*>^-1.
 
-  Multiplying du^*/dt and taking ensemble average, one obtains memory equation,
+  Multiplying du^*/dt on the generalized langevin form and taking ensemble average,
+  one obtains the memory equation,
 
-    memoryf(t) = 1/<u*u^*>*[<f(t)*du/dt^*> - omega*<u(t)*du/dt^*> 
-                           + \int_0^t memoryf(v)*<u(t-v)*du/dt^*> dv].
+    Gamma(t) = F(t) + \int_0^t Gamma(v).G(t-v) dv
 
-  Since all ensemble averaged quantities are evaluated, one can construct
-  memoryf(t) from this equation.
+  where[
 
-  At t=0, memoryf(0) = 1/<u*u^*>*[<f*du/dt^*> - omega*<u*du/dt^*>].
+    F(t) = [<f(t)*du/dt^*> - Omega.<u(t)*du/dt^*>].<u*u^*>^-1
+    G(t) = <u(t)*du/dt^*>.<u*u^*>^-1
+
+  Since all ensemble averaged quantities are evaluated, one can construct Gamma(t).
+
+  At t=0, Gamma(0) = F(0)
 
   At t=delta_t, time-integration is discretized by 2nd-order trapezoid rule,
 
-    \int_0^delta_t memoryf(v)*<u(delta_t-v)*du/dt^*> dv
-      = memoryf(0)*<u(delta_t)*du/dt^*> * 0.5*delta_t
-      + memoryf(delta_t)*<u(0)*du/dt^*> * 0.5*delta_t
+    \int_0^delta_t Gamma(v).G(delta_t-v) dv
+      = Gamma(0).G(delta_t) * 0.5*delta_t
+      + Gamma(delta_t).G(0) * 0.5*delta_t
 
   and then, 
 
-    memoryf(delta_t) = [<f(delta_t)*du/dt^*> - omega*<u(delta_t)*du/dt^*> 
-                       + memoryf(0)*<u(delta_t)*du/dt^*> * 0.5*delta_t]
-                     /(<u*u^*>)   
-                     /(1.0 - <u(0)*du/dt^*> * 0.5*delta_t).
+    Gamma(delta_t) = [F(delta_t) + 0.5*delta_t*Gamma(0).G(delta_t)].[I - 0.5*delta_t*G(0)]^-1
 
-  In the same way, memoryf(t) is calculated from memoryf(t-delta_t).
+  where I is the identity matrix.
 
-  The memory term is calculated by the convolution of memoryf(t) and u(t),
+  In the same way, Gamma(t) is calculated from Gamma(t-delta_t).
+
+  The memory term is calculated by the convolution of Gamma(t) and u(t),
   while integration range is reduced from 0<v<t to t-(nperiod-1)*delta_t<v<t,
 
-    s(t) = - \int_{t-(nperiod-1)*delta_t}^t memoryf(t)*u(t-v) dv.
+    s(t) = - \int_{t-(nperiod-1)*delta_t}^t Gamma(t).u(t-v) dv.
 
   The uncorrelated term is calculated as a residual,
 
