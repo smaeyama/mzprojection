@@ -6,12 +6,13 @@
 
 ### Overview ###
 
-  This is explanation of a Python3 module of Mori-Zwanzig projection, which
-  split ensembles of the analyzed time-series data f_i(t) into correlated and 
-  uncorrelated parts with regard to the variable of interests u_j(t).
+  This is explanation of a Python3 module of Mori-Zwanzig projection, which is
+  a statistical data analysis tool for an ensemble time-series data set.
+  One splits the analyzed time-series data f_i(t) into correlated and uncorrelated parts
+  with regard to the variable of interests u_j(t).
 
-  Oct. 2021, "mzprojection_multivariate" for projection of response variables f_i(t)
-  on multiple explanatory variables u_j(t) has been developed (Oct. 2021).
+  In Oct. 2021, the function "mzprojection_multivariate" has been developed 
+  for the projection on multiple u_j(t).
   The previous 1-to-1 projection will be obsolete, because it is covered by multivariate one.
 
 
@@ -143,14 +144,14 @@
 
   Then, Omega is obtained from
 
-    omega = <f*u^*>.<u*u^*>^-1.
+    Omega = <f*u^*>.<u*u^*>^-1.
 
   Multiplying du^*/dt on the generalized langevin form and taking ensemble average,
   one obtains the memory equation,
 
     Gamma(t) = F(t) + \int_0^t Gamma(v).G(t-v) dv
 
-  where[
+  where
 
     F(t) = [<f(t)*du/dt^*> - Omega.<u(t)*du/dt^*>].<u*u^*>^-1
     G(t) = <u(t)*du/dt^*>.<u*u^*>^-1
@@ -159,7 +160,7 @@
 
   At t=0, Gamma(0) = F(0)
 
-  At t=delta_t, time-integration is discretized by 2nd-order trapezoid rule,
+  At t=delta_t, time integration is discretized by 2nd-order trapezoid rule,
 
     \int_0^delta_t Gamma(v).G(delta_t-v) dv
       = Gamma(0).G(delta_t) * 0.5*delta_t
@@ -171,7 +172,7 @@
 
   where I is the identity matrix.
 
-  In the same way, Gamma(t) is calculated from Gamma(t-delta_t).
+  In the same way, Gamma(t) is calculated by using Gamma(0) to Gamma(t-delta_t).
 
   The memory term is calculated by the convolution of Gamma(t) and u(t),
   while integration range is reduced from 0<v<t to t-(nperiod-1)*delta_t<v<t,
@@ -180,7 +181,7 @@
 
   The uncorrelated term is calculated as a residual,
 
-    r(t) = f(t) - omega*u(t) - s(t).
+    r(t) = f(t) - Omega.u(t) - s(t).
 
 
 ### License and Copyright ###
