@@ -71,8 +71,8 @@
           nsample is the number of samples.
           nperiod is the number of time steps of each sample.
           nu is the number of degree of freedom of explanatory variable u_j (j=0,1,...,nu-1).
-      dudt[nsample,nperiod,nu] : Numpy array (float64 or complex128)
-          = du/dt
+      dudt0[nsample,nu] : Numpy array (float64 or complex128)
+          = du/dt(t=0)
       f[nsample,nperiod,nf] : Numpy array (float64 or complex128)
           Response variable f_i(t).
           nf is the number of independent response variables (i=0,1,...,nf-1).
