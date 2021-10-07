@@ -96,6 +96,20 @@ def solve_memory_integration(delta_t, f, u0, dudt0, uu0_inv, ududt, G, wG0_inv):
 
 
 def calc_residual(delta_t, u, f, omega, memoryf):
+    '''
+    Parameters
+    ----------
+    delta_t
+    u[nsample,nperiod,nu]
+    f[nsample,nperiod,nf]
+    omega[nf,nu]
+    memoryf[nperiod,nf,nu]  
+    
+    Returns
+    -------
+    s[nsample,nperiod,nf]
+    r[nsample,nperiod,nf]
+    '''
     #- 2nd-order trapezoid integration for memory term s(t) -
     nperiod, nf, nu = memoryf.shape
     wkmemf = np.zeros([nperiod,nperiod,nf,nu], dtype=memoryf.dtype)
@@ -211,7 +225,161 @@ def mzprojection_multivariate(delta_t, u, dudt0, f, flag_terms=False, flag_debug
             print("r[nsample,nperiod,nf].shape=",r.shape,r.dtype)
         return omega, memoryf, s, r
 
+
+def solve_memory_integration_discrete_time(f, u0, uu0_inv, uu, G, wG0_inv):
+    '''
+    Parameters
+    ----------
+    f[nsample,nperiod,nf]
+    u0[nsample,nu]
+    uu0_inv[nu,nu]
+    uu[nperiod,nu,nu]
+    G[nperiod,nu,nu]
+    wG0_inv[nu,nu]
     
+    Returns
+    -------
+    omega[nf,nu]
+    memoryf[nperiod,nf,nu]  
+    '''
+    #= Evaluate Markov coefficient Omega =
+    fu = calc_correlation(f,u0)
+    fu0 = fu[0,:,:]
+    omega = np.dot(fu0,uu0_inv)
+        
+    #= Evaluate memory function Gamma(t) =
+    F = - np.dot(fu,uu0_inv) + np.moveaxis(np.dot(omega,np.dot(uu,uu0_inv)),1,0)
+    memoryf = np.zeros_like(F)
+    memoryf[0] = F[0]
+    memoryf[1] = F[1]
+    for iperiod in range(2,memoryf.shape[0]):
+        memoryf[iperiod] = F[iperiod] + np.tensordot(memoryf[1:iperiod,:,:],G[iperiod-1:0:-1,:,:],axes=([0,-1],[0,-2]))
+    return omega, memoryf # omega[nu], memoryf[nperiod,nu]
+
+
+def calc_residual_discrete_time(u, f, omega, memoryf):
+    '''
+    Parameters
+    ----------
+    u[nsample,nperiod,nu]
+    f[nsample,nperiod,nf]
+    omega[nf,nu]
+    memoryf[nperiod,nf,nu]  
+    
+    Returns
+    -------
+    s[nsample,nperiod,nf]
+    r[nsample,nperiod,nf]
+    '''
+    nperiod, nf, nu = memoryf.shape
+    wkmemf = np.zeros([nperiod,nperiod,nf,nu], dtype=memoryf.dtype)
+    wkmemf[1,0] = memoryf[1]
+    wkmemf[1,1] = memoryf[0]
+    for iperiod in range(2,nperiod):
+        wkmemf[iperiod,0        ] = memoryf[iperiod]
+        wkmemf[iperiod,1:iperiod] = memoryf[iperiod-1:0:-1]
+        wkmemf[iperiod,iperiod  ] = memoryf[0]
+    s = - np.tensordot(u,wkmemf,axes=([1,2],[1,-1]))
+    r = f - np.dot(u,omega.T) - s
+    #%%% NOTE %%%
+    #% Since the above s, r is defined from u[isample,:,:] and f[isample,:,:],
+    #%     s[isample,0,:] = 0
+    #% is always imposed. Then, <s(t)s>=0, because s(0)=0.
+    #% However, after a long time, s and r is also expected to be in a statistically steady state, 
+    #%     <s(t)s> = <s(t+x)s(x)> /= 0.
+    #%%%%%%%%%%%%%%%
+    return s, r
+
+
+def mzprojection_multivariate_discrete_time(u, f, flag_terms=False, flag_debug=False):
+    '''
+    Evaluate projection of f(t) on u(t),
+      f_i(t) = Omega_ij*u_j(t) - int_0^t Gamma_ij(s)*u_j(t-s) ds + r_i(t)
+    taking summation over the repeated index j.
+    
+    Parameters
+    ----------
+    u[nsample,nperiod,nu] : Numpy array (float64 or complex128)
+        Explanatory variable u_j(t).
+        nsample is the number of samples.
+        nperiod is the number of time steps of a short-time data.
+        nu is the number of independent explanatory variable (j=0,1,...,nu-1).
+    f[nsample,nperiod,nf] : Numpy array (float64 or complex128)
+        Response variable f_i(t).
+        nf is the number of independent response variables (i=0,1,...,nf-1).
+        If 2D array f[nsample,nperiod] is passed, it is treated as 3D array with nf=1.
+    flag_terms : bool
+        Control flag to output memory and uncorrelated terms. 
+        Default: flag_term = False
+    flag_debug : bool
+        For debug.
+        Default: flag_debug = False
+    
+    Returns
+    -------
+    omega[nf,nu] : Numpy array (float64 or complex128)
+        Markov coefficient matrix Omega_ij.
+    memoryf[nperiod,nf,nu] : Numpy array (float64 or complex128)
+        Memory function matrix Gamma_ij(t).
+    
+    # if flag_terms==True:
+    s[nsample,nperiod,nf] : Numpy array (float64 or complex128)
+        Memory term s_i(t) = - int_0^t Gamma_ij(s)*u_j(t-s) ds
+    r[nsample,nperiod,nf] : Numpy array (float64 or complex128)
+        Uncorrelated term r_i(t) (also called orthogonal term or noise term).
+    '''
+    nsample = u.shape[0]
+    nperiod = u.shape[1]
+    if u.ndim == 2:
+        nu = 1
+        u = u.reshape(nsample,nperiod,nu)
+        dudt0 = dudt0.reshape(nsample,nu)
+    else:
+        nu = u.shape[2]
+    if f.ndim == 2:
+        nf = 1
+        f = f.reshape(nsample,nperiod,nf)
+    else:
+        nf = f.shape[2]
+    if flag_debug:
+        print("nsample=",nsample,", nperiod=",nperiod,", nu=",nu,", nf=",nf)
+        t1=timer()
+    
+    #= Evaluate correlations of explanatory variable u =
+    u0 = u[:,0,:]
+    uu = calc_correlation(u,u0)
+    uu0 = uu[0,:,:]
+    uu0_inv = np.linalg.inv(uu0)
+    G = -np.dot(uu,uu0_inv)
+    wG0_inv = np.linalg.inv(np.identity(nu)-G[0,:,:])
+    if flag_debug:
+        t2=timer();print("# Prepare correlations [sec]:",t2-t1);t1=timer()
+        print("      uu0_inv[nu,nu].shape=",uu0_inv.shape,uu0_inv.dtype)
+        print("    G[nperiod,nu,nu].shape=",G.shape,G.dtype)
+        print("      wG0_inv[nu,nu].shape=",wG0_inv.shape,wG0_inv.dtype)
+
+    #= Evaluate Markov coefficient Omega nad memory function Gamma =
+    omega, memoryf = solve_memory_integration_discrete_time(f, u0, uu0_inv, uu, G, wG0_inv)
+    if flag_debug:
+        t2=timer();print("# Calc. omega & memoryf [sec]:",t2-t1);t1=timer()
+        print("          omega[nf,nu].shape=",omega.shape,omega.dtype)
+        print("memoryf[nperiod,nf,nu].shape=",memoryf.shape,memoryf.dtype)
+        
+    if flag_terms == False:
+        
+        return omega, memoryf
+    
+    else:
+        
+        #= Evaluate uncorrelated term r(t) as a residual =
+        s, r = calc_residual_discrete_time(u, f, omega, memoryf)
+        if flag_debug:
+            t2=timer();print("# Calc. residual r [sec]:",t2-t1);t1=timer()
+            print("s[nsample,nperiod,nf].shape=",s.shape,s.dtype)
+            print("r[nsample,nperiod,nf].shape=",r.shape,r.dtype)
+        return omega, memoryf, s, r
+
+
 def calc_correlation_long_time_series(a,b,nperiod=None):
     '''
     Parameters
@@ -276,6 +444,20 @@ def solve_memory_integration_long_time_series(delta_t, f, u, dudt, nperiod, uu0_
 
 
 def calc_residual_long_time_series(delta_t, u, f, omega, memoryf):
+    '''
+    Parameters
+    ----------
+    delta_t
+    u[nsample,nperiod,nu]
+    f[nsample,nperiod,nf]
+    omega[nf,nu]
+    memoryf[nperiod,nf,nu]  
+    
+    Returns
+    -------
+    s[nsample,nperiod,nf]
+    r[nsample,nperiod,nf]
+    '''
     nrec, nu = u.shape
     nperiod, nf, nu = memoryf.shape
     wu = u.reshape(nrec,1,nu)
