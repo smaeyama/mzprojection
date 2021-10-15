@@ -333,7 +333,6 @@ def mzprojection_multivariate_discrete_time(u, f, flag_terms=False, flag_debug=F
     if u.ndim == 2:
         nu = 1
         u = u.reshape(nsample,nperiod,nu)
-        dudt0 = dudt0.reshape(nsample,nu)
     else:
         nu = u.shape[2]
     if f.ndim == 2:
