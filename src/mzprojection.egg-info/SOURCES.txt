@@ -1,0 +1,10 @@
+LICENSE
+README.md
+pyproject.toml
+setup.py
+src/mzprojection/__init__.py
+src/mzprojection/mzprojection.py
+src/mzprojection.egg-info/PKG-INFO
+src/mzprojection.egg-info/SOURCES.txt
+src/mzprojection.egg-info/dependency_links.txt
+src/mzprojection.egg-info/top_level.txt

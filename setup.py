@@ -8,8 +8,8 @@ setuptools.setup(
     version="0.0.1",
     author="Shinya Maeyama",
     author_email="smaeyama@p.phys.nagoya-u.ac.jp",
-    description="mzprojection package"
-    long_description="Projection operator method for statistical data analysis"
+    description="mzprojection package",
+    long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/smaeyama/mzprojection",
     project_urls={
@@ -21,6 +21,6 @@ setuptools.setup(
        "Operating System :: OS Independent",
     ],
     package_dir={"": "src"},
-    packages=setuptools.find_packages(where="src")
+    packages=setuptools.find_packages(where="src"),
     python_requires=">=3.6",
 )
