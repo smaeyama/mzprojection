@@ -9,7 +9,7 @@ setuptools.setup(
     author="Shinya Maeyama",
     author_email="smaeyama@p.phys.nagoya-u.ac.jp",
     description="mzprojection package"
-    long_description=long_description
+    long_description="Projection operator method for statistical data analysis"
     long_description_content_type="text/markdown",
     url="https://github.com/smaeyama/mzprojection",
     project_urls={
