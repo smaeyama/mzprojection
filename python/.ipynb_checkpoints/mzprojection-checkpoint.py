@@ -197,7 +197,7 @@ def mzprojection_multivariate(delta_t, u, dudt0, f, flag_terms=False, flag_debug
     G = np.dot(ududt,uu0_inv)
     wG0_inv = np.linalg.inv(np.identity(nu)-0.5*delta_t*G[0,:,:])
     if flag_debug:
-        t2=timer();print("# Prepare correlations [sec]:",t2-t1);t1=timer()
+        t2=timer();print("# Elapsed time to prepare correlations [sec]:",t2-t1);t1=timer()
         print("      uu0_inv[nu,nu].shape=",uu0_inv.shape,uu0_inv.dtype)
         print("ududt[nperiod,nu,nu].shape=",ududt.shape,ududt.dtype)
         print("    G[nperiod,nu,nu].shape=",G.shape,G.dtype)
@@ -207,7 +207,7 @@ def mzprojection_multivariate(delta_t, u, dudt0, f, flag_terms=False, flag_debug
     #= Evaluate Markov coefficient Omega nad memory function Gamma =
     omega, memoryf = solve_memory_integration(delta_t, f, u0, dudt0, uu0_inv, ududt, G, wG0_inv)
     if flag_debug:
-        t2=timer();print("# Calc. omega & memoryf [sec]:",t2-t1);t1=timer()
+        t2=timer();print("# Elapsed time to calc. omega & memoryf [sec]:",t2-t1);t1=timer()
         print("          omega[nf,nu].shape=",omega.shape,omega.dtype)
         print("memoryf[nperiod,nf,nu].shape=",memoryf.shape,memoryf.dtype)
         
@@ -220,7 +220,7 @@ def mzprojection_multivariate(delta_t, u, dudt0, f, flag_terms=False, flag_debug
         #= Evaluate uncorrelated term r(t) as a residual =
         s, r = calc_residual(delta_t, u, f, omega, memoryf)
         if flag_debug:
-            t2=timer();print("# Calc. residual r [sec]:",t2-t1);t1=timer()
+            t2=timer();print("# Elapsed time to calc. residual r [sec]:",t2-t1);t1=timer()
             print("s[nsample,nperiod,nf].shape=",s.shape,s.dtype)
             print("r[nsample,nperiod,nf].shape=",r.shape,r.dtype)
         return omega, memoryf, s, r
@@ -293,14 +293,14 @@ def calc_residual_discrete_time(u, f, omega, memoryf):
 
 def mzprojection_multivariate_discrete_time(u, f, flag_terms=False, flag_debug=False):
     '''
-    Evaluate projection of f(t) on u(t),
-      f_i(t) = Omega_ij*u_j(t) - int_0^t Gamma_ij(s)*u_j(t-s) ds + r_i(t)
+    Evaluate discrete-time M-Z projection of f(t_n) on u(t_n),
+      f_i(t_n) = Omega_ij*u_j(t_n) - \sum_{l=0}^{n-1} Gamma_ij(t_l)*u_j(t_{n-l}) + r_i(t_n)
     taking summation over the repeated index j.
     
     Parameters
     ----------
     u[nsample,nperiod,nu] : Numpy array (float64 or complex128)
-        Explanatory variable u_j(t).
+        Explanatory variable u_j(t_n).
         nsample is the number of samples.
         nperiod is the number of time steps of a short-time data.
         nu is the number of independent explanatory variable (j=0,1,...,nu-1).
@@ -352,7 +352,7 @@ def mzprojection_multivariate_discrete_time(u, f, flag_terms=False, flag_debug=F
     G = -np.dot(uu,uu0_inv)
     wG0_inv = np.linalg.inv(np.identity(nu)-G[0,:,:])
     if flag_debug:
-        t2=timer();print("# Prepare correlations [sec]:",t2-t1);t1=timer()
+        t2=timer();print("# Elapsed time to prepare correlations [sec]:",t2-t1);t1=timer()
         print("      uu0_inv[nu,nu].shape=",uu0_inv.shape,uu0_inv.dtype)
         print("    G[nperiod,nu,nu].shape=",G.shape,G.dtype)
         print("      wG0_inv[nu,nu].shape=",wG0_inv.shape,wG0_inv.dtype)
@@ -360,7 +360,7 @@ def mzprojection_multivariate_discrete_time(u, f, flag_terms=False, flag_debug=F
     #= Evaluate Markov coefficient Omega nad memory function Gamma =
     omega, memoryf = solve_memory_integration_discrete_time(f, u0, uu0_inv, uu, G, wG0_inv)
     if flag_debug:
-        t2=timer();print("# Calc. omega & memoryf [sec]:",t2-t1);t1=timer()
+        t2=timer();print("# Elapsed time to calc. omega & memoryf [sec]:",t2-t1);t1=timer()
         print("          omega[nf,nu].shape=",omega.shape,omega.dtype)
         print("memoryf[nperiod,nf,nu].shape=",memoryf.shape,memoryf.dtype)
         
@@ -373,7 +373,7 @@ def mzprojection_multivariate_discrete_time(u, f, flag_terms=False, flag_debug=F
         #= Evaluate uncorrelated term r(t) as a residual =
         s, r = calc_residual_discrete_time(u, f, omega, memoryf)
         if flag_debug:
-            t2=timer();print("# Calc. residual r [sec]:",t2-t1);t1=timer()
+            t2=timer();print("# Elapsed time to calc. residual r [sec]:",t2-t1);t1=timer()
             print("s[nsample,nperiod,nf].shape=",s.shape,s.dtype)
             print("r[nsample,nperiod,nf].shape=",r.shape,r.dtype)
         return omega, memoryf, s, r
@@ -537,7 +537,7 @@ def mzprojection_multivariate_long_time_series(delta_t, u, dudt, f, nperiod, fla
     G = np.dot(ududt,uu0_inv)
     wG0_inv = np.linalg.inv(np.identity(nu)-0.5*delta_t*G[0,:,:])
     if flag_debug:
-        t2=timer();print("# Prepare correlations [sec]:",t2-t1);t1=timer()
+        t2=timer();print("# Elapsed time to prepare correlations [sec]:",t2-t1);t1=timer()
         print("      uu0_inv[nu,nu].shape=",uu0_inv.shape,uu0_inv.dtype)
         print("ududt[nperiod,nu,nu].shape=",ududt.shape,ududt.dtype)
         print("    G[nperiod,nu,nu].shape=",G.shape,G.dtype)
@@ -547,7 +547,7 @@ def mzprojection_multivariate_long_time_series(delta_t, u, dudt, f, nperiod, fla
     #= Evaluate Markov coefficient Omega nad memory function Gamma =
     omega, memoryf = solve_memory_integration_long_time_series(delta_t, f, u, dudt, nperiod, uu0_inv, ududt, G, wG0_inv)
     if flag_debug:
-        t2=timer();print("# Calc. omega & memoryf [sec]:",t2-t1);t1=timer()
+        t2=timer();print("# Elapsed time to calc. omega & memoryf [sec]:",t2-t1);t1=timer()
         print("          omega[nf,nu].shape=",omega.shape,omega.dtype)
         print("memoryf[nperiod,nf,nu].shape=",memoryf.shape,memoryf.dtype)
         
@@ -560,7 +560,7 @@ def mzprojection_multivariate_long_time_series(delta_t, u, dudt, f, nperiod, fla
         #= Evaluate uncorrelated term r(t) as a residual =
         s, r = calc_residual_long_time_series(delta_t, u, f, omega, memoryf)
         if flag_debug:
-            t2=timer();print("# Calc. residual r [sec]:",t2-t1);t1=timer()
+            t2=timer();print("# Elapsed time to calc. residual r [sec]:",t2-t1);t1=timer()
             print("s[nsample,nperiod,nf].shape=",s.shape,s.dtype)
             print("r[nsample,nperiod,nf].shape=",r.shape,r.dtype)
         return omega, memoryf, s, r
