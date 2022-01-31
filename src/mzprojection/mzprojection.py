@@ -3,7 +3,6 @@
 
 import numpy as np
 from time import time as timer
-from scipy.signal import fftconvolve
 
     
 def split_long_time_series(u_raw, ista=0, nperiod=None, nshift=10):
@@ -391,6 +390,8 @@ def calc_correlation_long_time_series(a,b,nperiod=None):
     -------
     corr[nperoid,na,nb]
     '''
+    from scipy.signal import fftconvolve
+
     if a.ndim == 1:
         nrec = a.shape[0]
         na = 1
@@ -457,6 +458,8 @@ def calc_residual_long_time_series(delta_t, u, f, omega, memoryf):
     s[nsample,nperiod,nf]
     r[nsample,nperiod,nf]
     '''
+    from scipy.signal import fftconvolve
+
     nrec, nu = u.shape
     nperiod, nf, nu = memoryf.shape
     wu = u.reshape(nrec,1,nu)
@@ -637,8 +640,6 @@ def mzprojection_ensemble_of_time_series(nsample, nperiod, delta_t, u, dudt, f):
     numpy.complex128 ::    ff[nperiod]       ! Correlation <f(t)f>
 
     '''
-    import numpy as np
-
     #= Evaluate Markov coefficient Omega =
     omega = sum(f[0,0:nsample]*np.conjugate(u[0,0:nsample])) / sum(u[0,0:nsample]*np.conjugate(u[0,0:nsample])) 
 
@@ -723,9 +724,6 @@ def mzprojection_long_time_series(nrec, ista, nperiod, nshift, delta_t, u_raw, d
     numpy.complex128 ::    ff[nperiod]   ! Correlation <f(t)f>
 
     '''
-    import numpy as np
-    import time
-
     nsample_raw = int((nrec-ista-nperiod)/nshift) + 1
     u = np.zeros([nperiod,nsample_raw], dtype=np.complex128)
     dudt = np.zeros([nperiod,nsample_raw], dtype=np.complex128)
@@ -787,7 +785,6 @@ def memoryf_get_fitting_coef(delta_t, memoryf, order=0, t_range=None):
     cl(order+1) : Numpy array, dtype=np.complex128
         Fitting coefficient
     '''
-    import numpy as np
     from scipy import optimize
 
     # Fitting function
@@ -849,7 +846,6 @@ def rr_get_fitting_coef(delta_t, rr, t_range=None):
     sigma : float
         Fitting <r(t)r(0)^*> amplitude
     '''
-    import numpy as np
     from scipy import optimize
 
     # Analyzed time range
@@ -886,7 +882,6 @@ def memoryf_fitted(tau, cl, x):
     '''
     Gamma(t) = \sum_l=0^order c_l/l!*(t/tau)**l*exp(-t/tau)
     '''
-    import numpy as np
     for i in range(len(cl)):
         if i == 0:
             wf = np.exp(-x/tau)
@@ -900,6 +895,5 @@ def rr_fitted(theta, sigma, x):
     '''
     <r(t)r(0)^*> = Re[simga**2/theta]*exp(-t/theta)
     '''
-    import numpy as np
     func = (sigma**2/theta).real * np.exp(-x/theta)
     return func
