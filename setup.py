@@ -5,7 +5,12 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="mzprojection",
-    version="0.0.1",
+    version="0.0.2",
+    install_requires=[
+        "numpy",
+        "scipy",
+        "time",
+    ],
     author="Shinya Maeyama",
     author_email="smaeyama@p.phys.nagoya-u.ac.jp",
     description="mzprojection package",
