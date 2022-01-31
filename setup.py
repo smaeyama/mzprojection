@@ -5,11 +5,16 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="mzprojection",
-    version="0.0.1",
+    version="0.0.2",
+    install_requires=[
+        "numpy",
+        "scipy",
+        "time",
+    ],
     author="Shinya Maeyama",
     author_email="smaeyama@p.phys.nagoya-u.ac.jp",
-    description="mzprojection package"
-    long_description="Projection operator method for statistical data analysis"
+    description="mzprojection package",
+    long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/smaeyama/mzprojection",
     project_urls={
@@ -21,6 +26,6 @@ setuptools.setup(
        "Operating System :: OS Independent",
     ],
     package_dir={"": "src"},
-    packages=setuptools.find_packages(where="src")
+    packages=setuptools.find_packages(where="src"),
     python_requires=">=3.6",
 )
